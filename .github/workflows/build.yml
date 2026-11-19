@@ -2,11 +2,11 @@ name: Build Kernel
 on: workflow_dispatch
 env:
   DEFCONFIG: agni_whyred-oldcam_defconfig
-  KBUILD_BUILD_USER: pei 
+  KBUILD_BUILD_USER: pei
   KBUILD_BUILD_HOST: Fnz_09
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Install deps
@@ -25,7 +25,7 @@ jobs:
           sed -i '/net\/wireguard\/Kconfig/d' net/Kconfig
           sed -i '/wireguard/d' net/Makefile
           sed -i '/CONFIG_WIREGUARD/d' arch/arm64/configs/$DEFCONFIG
-      - name: RieLCantik
+      - name: Rename kernel
         run: |
           sed -i '/^CONFIG_LOCALVERSION=/d' arch/arm64/configs/$DEFCONFIG
           echo 'CONFIG_LOCALVERSION="-RielCantik"' >> arch/arm64/configs/$DEFCONFIG
