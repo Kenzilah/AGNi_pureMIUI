@@ -25,7 +25,7 @@ jobs:
         run: |
           make O=out ARCH=arm64 $DEFCONFIG
           grep KALLSYMS out/.config
-          make -j$(nproc) O=out ARCH=arm64 LLVM=1 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+          make -j$(nproc) O=out ARCH=arm64 HOSTCC="gcc -fcommon" CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
       - uses: actions/upload-artifact@v4
         with:
           name: kernel
