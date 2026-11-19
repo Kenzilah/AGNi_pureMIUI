@@ -1,0 +1,26 @@
+name: Build Kernel
+on: workflow_dispatch
+env:
+  DEFCONFIG: agni_whyred-oldcam_defconfig
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bc bison flex libssl-dev libelf-dev clang lld llvm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi
+      - name: Enable KALLSYMS
+        run: |
+          echo "CONFIG_KALLSYMS=y" >> arch/arm64/configs/$DEFCONFIG
+          echo "CONFIG_KALLSYMS_ALL=y" >> arch/arm64/configs/$DEFCONFIG
+      - name: Build
+        run: |
+          make O=out ARCH=arm64 $DEFCONFIG
+          grep KALLSYMS out/.config
+          make -j$(nproc) O=out ARCH=arm64 LLVM=1 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kernel
+          path: out/arch/arm64/boot/Image.gz-dtb
