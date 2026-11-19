@@ -10,7 +10,7 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y bc bison flex libssl-dev libelf-dev clang lld llvm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi
+          sudo apt-get install -y bc bison flex libssl-dev libelf-dev clang lld llvm gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi ccache
       - name: Enable KALLSYMS
         run: |
           echo "CONFIG_KALLSYMS=y" >> arch/arm64/configs/$DEFCONFIG
