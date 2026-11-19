@@ -15,6 +15,12 @@ jobs:
         run: |
           echo "CONFIG_KALLSYMS=y" >> arch/arm64/configs/$DEFCONFIG
           echo "CONFIG_KALLSYMS_ALL=y" >> arch/arm64/configs/$DEFCONFIG
+      - name: Disable WireGuard fetch
+        run: |
+          sed -i '/fetch-latest-wireguard.sh/d' scripts/Kbuild.include
+          sed -i '/net\/wireguard\/Kconfig/d' net/Kconfig
+          sed -i '/wireguard/d' net/Makefile
+          sed -i '/CONFIG_WIREGUARD/d' arch/arm64/configs/$DEFCONFIG
       - name: Build
         run: |
           make O=out ARCH=arm64 $DEFCONFIG
